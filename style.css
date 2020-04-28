@@ -1,0 +1,58 @@
+body {
+  font-family: sans-serif;
+  background-color: #022C46;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+body p {
+  text-align: center;
+  font-size: 200%;
+  color: #00CA12;
+}
+
+.form {
+  background-color: #022C46;
+  display: block;
+  width: auto;
+  padding: 2% 4% 5% 4%;
+  border: #fff 1px solid;
+  border-radius: 10px;
+}
+.form input, .form button {
+  font-size: 130%;
+  padding: 0.25rem;
+  background-color: #021d30;
+  color: #fff;
+  border: #fff 1px solid;
+  display: block;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+.form label {
+  color: #fff;
+  font-size: 130%;
+  display: block;
+}
+.form button {
+  margin-top: 3rem;
+}
+.form .registro {
+  margin-top: 2rem;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+.form .registro a {
+  align-self: center;
+  color: #fff;
+  text-align: center;
+  width: 100%;
+}
+.form .error {
+  color: red;
+  font-size: 0.8rem;
+}
+
+/*# sourceMappingURL=style.css.map */

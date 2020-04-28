@@ -1,0 +1,68 @@
+$backColor:#022C46;
+$color2:#00CA12;
+
+body{
+    font-family: sans-serif;
+    background-color:$backColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    p{
+        text-align: center;
+        font-size: 200%;
+        color: $color2 ;
+    }
+}
+
+.form{
+   
+    background-color: $backColor;
+    display: block;
+
+    width: auto;
+    padding: 2% 4% 5% 4%;
+
+    border:#fff 1px solid ;
+    border-radius: 10px;
+    input, button{
+        font-size: 130%;
+        padding: .25rem;
+        background-color: rgb(2, 29, 48);
+        color: #fff;
+        border:#fff 1px solid;
+        display: block;
+        margin: .50rem ;
+        padding: .5rem;
+        border-radius: 5px;
+    }
+
+    label{
+        
+        color: #fff;
+        font-size: 130%;
+        display: block;
+    }
+    
+    button{
+        margin-top:3rem ;
+    }
+
+    .registro{
+        margin-top: 2rem;
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        a{
+            align-self: center;
+            color: #fff;
+            text-align: center;
+            width: 100%;
+     }
+    }
+
+    .error{
+        color:red;
+        font-size: .8rem;
+    }
+}
