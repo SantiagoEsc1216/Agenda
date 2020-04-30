@@ -10,6 +10,7 @@
   <?php
     require ("validInputs.php");
     $imagen = $nombre = $telefono = $mail= $userError = $mailError = $phoneError = $imgError= "";
+
    
    
    
@@ -42,32 +43,21 @@
            validPhoneNumber($telefono);
        }
    
-       if(empty($_FILES["Imagen"])){
-         
-   
-       }else{
-        $CarpetaImagen="F:/wamp64/www/Agenda/Imagenes/".$_FILES["Imagen"]["name"];
+            if(!empty($_FILES["Imagen"])){
 
-        $imagen = $_FILES["Imagen"]["tmp_name"];
-        $sizeImage= $_FILES["Imagen"]["size"];
-        $ImageType=$_FILES["Imagen"]["type"];
+                if($_FILES["Imagen"]["size"]>$Post_max_size) throw new Exception("Post contentn lengt exceeds the limit of php.ini");
 
-        if(validImage($sizeImage, $ImageType)){
-        move_uploaded_file($imagen, $CarpetaImagen);
-        $imgError="1";
-        
-        }
-    
-        
-
-       }
+                $CarpetaImagen="F:/wamp64/www/Agenda/Imagenes/".$_FILES["Imagen"]["name"];
+                $imagen = $_FILES["Imagen"]["tmp_name"];
+                
+                if(validImage()){
+                    move_uploaded_file($imagen, $CarpetaImagen);
+                } 
+            }
 
        if(validName($nombre) && validMail($mail) && validPhoneNumber($telefono) && validImage($sizeImage, $ImageType)){
        
-       }
-       else{}
-   
-   
+       }   else{}  
    }
   ?>
     <div class="form">

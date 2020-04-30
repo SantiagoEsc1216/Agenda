@@ -5,7 +5,7 @@
        "image/jpg"
    );
    $imageSizeMax = 2097152; //2 MB
-
+   $Post_max_size=8388608 ; //8MB en php.ini
 
    
 function validName($user){
@@ -64,33 +64,30 @@ function validPhoneNumber($PhoneNumber){
     }
 }
 
-function validImage($size, $type){
-    global $imageTypes, $imageSizeMax;
-  
- 
+function validImage(){
+    global $imageTypes, $imageSizeMax, $imgError, $Post_max_size;
+    
+       if($_FILES["Imagen"]["size"]>$Post_max_size) throw new Exception("Post contentn lengt exceeds the limit of php.ini");
+
     $Errors= array();
 
-    if($size > $imageSizeMax){
-        $Errors[]="El tamaño de la imagen no puede ser mayor a 2MB \n";
+    if($_FILES["Imagen"]["size"] > $imageSizeMax or $_FILES["Imagen"]["error"]=1 ){
+        array_push($Errors,"Tamaño maximo 2Mb \n");        
     }
 
-    if((!in_array($type, $imageTypes))){
-        $Errors[]="Solo imagenes de tipo .Jpeg y .Jpg";  
+    if((!in_array($_FILES["Imagen"]["type"], $imageTypes))){
+        array_push($Errors, "Solo imagenes de tipo .Jpeg y .Jpg");       
     }
 
     if(sizeof($Errors)>0){
-        global $imgError;
-        return false;
-        $imgError="error2";
-       
+       $imgError = implode(" ,", $Errors);
+        
+        return false;   
+      
     }else{
-       
         return true;
-        $imgError="bien";
-    }
-
-    global $imgError;
-    $imgError="Aaaaaaa";
+    
+}
 
 }
 ?>
