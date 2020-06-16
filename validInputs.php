@@ -67,17 +67,17 @@ function validPhoneNumber($PhoneNumber){
 function validImage(){
     global $imageTypes, $imageSizeMax, $imgError, $Post_max_size;
     
-       if($_FILES["Imagen"]["size"]>$Post_max_size) throw new Exception("Post contentn lengt exceeds the limit of php.ini");
+      
 
     $Errors= array();
 
-    if($_FILES["Imagen"]["size"] > $imageSizeMax or $_FILES["Imagen"]["error"]=1 ){
-        array_push($Errors,"Tamaño maximo 2Mb \n");        
-    }
+        if($_FILES["Imagen"]["size"] > $imageSizeMax or $_FILES["Imagen"]["error"]=1 ){
+            array_push($Errors,"Tamaño maximo 2Mb \n");        
+        }
 
-    if((!in_array($_FILES["Imagen"]["type"], $imageTypes))){
-        array_push($Errors, "Solo imagenes de tipo .Jpeg y .Jpg");       
-    }
+        if((!in_array($_FILES["Imagen"]["type"], $imageTypes))){
+            array_push($Errors, "Solo imagenes de tipo .Jpeg y .Jpg");       
+        }
 
     if(sizeof($Errors)>0){
        $imgError = implode(" ,", $Errors);
