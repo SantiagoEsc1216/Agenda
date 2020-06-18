@@ -120,6 +120,80 @@ function Insert(){
             echo "error: ".$e->getMessage();
         }
     }
+
+    function Get_ID(){
+        include("ServerSql.php");
+        
+            try{
+                $conn=new PDO($dns, $db_username, $db_password);
+        
+                $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $stmt = $conn->prepare("SELECT ID from Users where Mail = :Mail");
+
+                $stmt->bindValue(":Mail", $_SESSION["Mail"]);
+                $stmt-> execute();
+
+                $ID_User =  $stmt->fetchColumn();
+
+                return $ID_User;
+
+                $conn = null;
+            }
+        
+            catch(PDOException $e){
+                echo "error: ".$e->getMessage();
+            }
+    }
+
+    function get_contacts($ID_User){
+
+       include("ServerSql.php");
+
+       try{
+        $conn=new PDO($dns, $db_username, $db_password);
+
+        $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $stmt = $conn->prepare("SELECT Name_Contact, Phone_Contact, Mail_Contact, Img_Contact from Contact where ID_user = :Id_u");
+
+        $stmt->bindValue(":Id_u", $ID_User);
+        $stmt-> execute();
+
+        $contact_details= $stmt->fetchAll(pdo::FETCH_ASSOC);
+
+        return $contact_details;
+
+        $conn = null;
+    }
+
+    catch(PDOException $e){
+        echo "error: ".$e->getMessage();
+    }
+
+    }
+
+    function get_numberOfContacts($ID_User){
+        include("ServerSql.php");
+        try{
+            $conn=new PDO($dns, $db_username, $db_password);
+    
+            $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $stmt = $conn->prepare("SELECT count(Name_Contact) from Contact where ID_user = :Id_u");
+
+            $stmt->bindValue(":Id_u", $ID_User);
+            $stmt-> execute();
+
+            $numberOfContacts =  $stmt->fetchColumn();
+
+            return $numberOfContacts;
+
+            $conn = null;
+        }
+    
+        catch(PDOException $e){
+            echo "error: ".$e->getMessage();
+        }
+
+    }
 }
 
 

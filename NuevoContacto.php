@@ -8,10 +8,11 @@
 </head>
 <body>
   <?php
+  session_start();
     require ("validInputs.php");
     $imagen = $nombre = $telefono = $mail= $userError = $mailError = $phoneError = $imgError= "";
 
-   
+   $ImgDefault;
    
    
    if($_SERVER["REQUEST_METHOD"]=="POST"){
@@ -43,22 +44,16 @@
            validPhoneNumber($telefono);
        }
    
-            if(!empty($_FILES["Imagen"])){
 
-                if($_FILES["Imagen"]["size"]>$Post_max_size) throw new Exception("Post contentn lengt exceeds the limit of php.ini");
+       if(validName($nombre) && validMail($mail) && validPhoneNumber($telefono)){
 
-                $CarpetaImagen="F:/wamp64/www/Agenda/Imagenes/".$_FILES["Imagen"]["name"];
-                $imagen = $_FILES["Imagen"]["tmp_name"];
-                
-                if(validImage()){
-                    move_uploaded_file($imagen, $CarpetaImagen);
-                } 
-            }
-
-       if(validName($nombre) && validMail($mail) && validPhoneNumber($telefono) && validImage($sizeImage, $ImageType)){
-       
-       }   else{}  
-   }
+    
+            include ("Contact.php");
+            
+            $Contact = new Contact($nombre, $telefono, $mail);
+            $Contact-> Add_contact();
+       }
+}
   ?>
     <div class="form">
     <form action="<?php htmlspecialchars('addContact.php')  ?>" method="POST" enctype="multipart/form-data">

@@ -1,0 +1,13 @@
+ 
+
+
+Arreglar input handler imagen tamaño javascript;
+
+
+Registro error 
+
+mostrar contacto
+
+mejorar interfaz
+
+Comprobar imagen antes de subir y borrar al editar 

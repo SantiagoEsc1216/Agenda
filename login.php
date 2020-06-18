@@ -37,8 +37,8 @@
             $sesion= new User("",$pass, $mail);
             if($sesion->Pass()){
                 session_start();
-                $_SESSION["Nombre"] = $sesion->Nombre();
-                
+                $_SESSION["Username"] = $sesion->Nombre();
+                $_SESSION["Mail"]=$mail;
                 header("location: Agenda.php");
 
             }else{
