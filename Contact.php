@@ -28,7 +28,7 @@ class Contact{
 
                     }else{
                         if(validImage()){
-                            move_uploaded_file( $_FILES["Imagen"]["tmp_name"], $_FILES["Imagen"]["name"]);
+                            move_uploaded_file( $_FILES["Imagen"]["tmp_name"],__DIR__."\Imagenes/". $_FILES["Imagen"]["name"]);
                            $this->Img_contact=$_FILES["Imagen"]["name"]; 
                     } 
                  

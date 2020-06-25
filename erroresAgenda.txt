@@ -11,3 +11,10 @@ mostrar contacto
 mejorar interfaz
 
 Comprobar imagen antes de subir y borrar al editar 
+
+
+error Telefono PDOException: SQLSTATE[22003]: Numeric value out of range: 1264 Out of range value for column 'Phone_Contact' at row 1 in
+
+Agregar mensaje de contacto agregado
+
+Buscar Contacto
