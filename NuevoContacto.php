@@ -20,9 +20,8 @@
   <?php
   session_start();
     require ("validInputs.php");
-    $imagen = $nombre = $telefono = $mail= $userError = $mailError = $phoneError = $imgError= "";
+    $imagen = $nombre = $telefono = $mail= $userError = $mailError = $phoneError = $imgError= $Success = "";
 
-   $ImgDefault;
    
    
    if($_SERVER["REQUEST_METHOD"]=="POST"){
@@ -45,14 +44,14 @@
            validMail($mail);
        }
    
-       if(empty($_POST["Telefono"])){
-           $phoneError="Rellene este campo";
-   
-       }else{
-           $telefono = $_POST["Telefono"];
-           $telefono= cleanInput($telefono);
-           validPhoneNumber($telefono);
-       }
+        if(empty($_POST["Telefono"])){
+            $phoneError="Rellene este campo";
+    
+        }else{
+            $telefono = $_POST["Telefono"];
+            $telefono= cleanInput($telefono);
+            validPhoneNumber($telefono);
+        }
    
 
        if(validName($nombre) && validMail($mail) && validPhoneNumber($telefono)){
@@ -61,7 +60,9 @@
             include ("Contact.php");
             
             $Contact = new Contact($nombre, $telefono, $mail);
-            $Contact-> Add_contact();
+           if ($Contact-> Add_contact()){
+               $Success="Contacto agregado";
+           }
        }
 }
   ?>
@@ -111,27 +112,29 @@
 
                     <!------------------------------- Formulario de contacto ------------------------------------->
 
+                    <div class="alert alert-success mx-auto mt-4" style="width: 45vw;"><?php echo $Success?></div>
+
     <div class="border border-primary container-fluid p-3 mx-auto mt-5 " style="width: 50%; min-width:300px">
         <form action="<?php htmlspecialchars('addContact.php')  ?>" method="POST" enctype="multipart/form-data">
 
             <div class="form-group">
                 <label for="Nombre">Nombre:</label> <input type="text" name="Nombre" class="form-control">
-                <span class="error"><?php echo $userError ?></span>
+                <div class="alert alert-danger mt-1"><?php echo $userError ?></div>
             </div>
 
             <div class="form-group">
                 <label for="Mail">E-mail:</label> <input type="text" name="Mail" class="form-control">
-                <span class="error"><?php echo $mailError ?></span>
+                <div class="alert alert-danger mt-1"><?php echo $mailError ?></div>
             </div>
 
             <div class="form-group">
                 <label for="Telefono">Telefono:</label> <input type="text" name="Telefono" class="form-control">
-                <span class="error"><?php echo $phoneError ?></span>
+                <div class="alert alert-danger mt-1"><?php echo $phoneError ?></div>
             </div>
 
             <div class="form-group">
                 <label for="Imagen">Imagen de contacto (opcional) :</label> <input type="file" name="Imagen" class="form-control">
-                <span class="error"><?php echo $imgError ?></span>
+                <div class="alert alert-danger mt-1"><?php echo $imgError ?></div>
             </div>
 
             <button  type="submit" class="btn btn-primary ">Agregar nuevo contacto</button>
