@@ -1,0 +1,11 @@
+.block-lock{
+
+position: absolute;
+top: 0px;
+left: 0px;
+height:0%;
+width:0%;        /* hacemos que ocupe toda la pantalla a cualquier resolución*/
+z-index: 50;        /* lo colocamos por encima del resto de componentes*/
+background-color: #ffffff;
+opacity: 70%;
+}
