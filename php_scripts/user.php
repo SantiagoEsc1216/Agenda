@@ -1,5 +1,5 @@
 <?php 
-
+require_once "valid_inputs.php";
 
 class User{
 
@@ -8,9 +8,10 @@ public $pass;
 public $mail;
 
 function __construct($user, $pass, $mail){
-    $this->user = $user;
-    $this->pass = $pass;
-    $this->mail = $mail;
+
+    $this->user = cleanInput($user);
+    $this->pass = cleanInput($pass);
+    $this->mail = filter_var($mail, FILTER_SANITIZE_EMAIL);
 }
 
 function Insert(){
@@ -40,7 +41,7 @@ function Insert(){
 
  }
 
- function Existencia(){
+ function user_verify(){
 
     include("ServerSql.php");
 
@@ -61,6 +62,8 @@ function Insert(){
             return true;
         }
         $conn=null;
+
+       
     }
 
     catch(PDOException $e){
@@ -69,7 +72,7 @@ function Insert(){
 
 }
 
-    function Pass(){
+    function pass_verify(){
         include("ServerSql.php");
 
         try{
@@ -91,6 +94,7 @@ function Insert(){
                 return false;
             }
             $conn=null;
+            
         }
     
         catch(PDOException $e){
@@ -98,7 +102,7 @@ function Insert(){
         }
     }
 
-    function Nombre(){
+    function get_username(){
         include("ServerSql.php");
 
         try{
@@ -130,7 +134,7 @@ function Insert(){
                 $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $stmt = $conn->prepare("SELECT ID from Users where Mail = :Mail");
 
-                $stmt->bindValue(":Mail", $_SESSION["Mail"]);
+                $stmt->bindValue(":Mail", $_SESSION["mail"]);
                 $stmt-> execute();
 
                 $ID_User =  $stmt->fetchColumn();

@@ -49,7 +49,7 @@
       
          if(validName($user) && validPass($pass) && validMail($mail)){
             $NewUser=new User($user, $pass, $mail);
-          if($NewUser-> Existencia()){
+          if($NewUser-> user_verify()){
             $NewUser->   Insert();
             header("location: login.php");
          }

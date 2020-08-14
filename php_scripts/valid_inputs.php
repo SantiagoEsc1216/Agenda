@@ -9,38 +9,27 @@
 
    
 function validName($user){
-    global $userError, $cararteresAdmitidos; 
+    global  $cararteresAdmitidos; 
     if (!preg_match($cararteresAdmitidos, $user)){
-        $userError="Solo puedes usar letras y espacios en blanco";
         return false;
-    }
-
-    else{
-    
+    }else{
         return true;
     }
 }
 
 function validPass($pass){
-    global $passError, $cararteresAdmitidos; 
+    global $cararteresAdmitidos; 
     if (!preg_match($cararteresAdmitidos, $pass)){
-        $passError="Solo puedes usar letras y espacios en blanco";
         return false;
-    }
-
-    else{
+    }else{
         return true;
     }
 }
 
 function validMail($mail_input){
-    global $mailError;
     if(!filter_var($mail_input, FILTER_VALIDATE_EMAIL)){
-        
-        $mailError="Introduzca un e-mail valido";      
         return false;
-    }
-    else{
+    }else{
         return true;
     }
 }
@@ -67,7 +56,6 @@ function validPhone($PhoneNumber){
 function validImage(){
     global $imageTypes, $imageSizeMax, $imgError;
     
-  
  $Errors= array();
 
  if($_FILES["Imagen"]["size"] > $imageSizeMax){

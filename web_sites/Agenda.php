@@ -22,7 +22,11 @@
 
         session_start();
 
-        $UserSession =  new User($_SESSION["Username"],"",$_SESSION["Mail"]);
+        if(empty($_SESSION["username"]) or empty($_SESSION["mail"]) or empty($_SESSION["loggedin"])){
+            header("location: login.php");
+        }
+
+        $UserSession =  new User($_SESSION["username"],"",$_SESSION["mail"]);
 
         $IDs = array();
 
@@ -47,14 +51,14 @@
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" aria-label="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
-                            <?php echo $_SESSION["Username"] ?> 
+                            <?php echo $_SESSION["username"] ?> 
                         </a>
                         
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             
                             <a href="#" class="dropdown-item">Perfil</a>
                                 <div class="dropdown-divider"></div>
-                            <a href="closeSession.php" class="dropdown-item">Cerrar sesion</a>
+                            <a href="../php_scripts/closeSession.php" class="dropdown-item">Cerrar sesion</a>
 
                         </div>
                     </li>
