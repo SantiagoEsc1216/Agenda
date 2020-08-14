@@ -64,33 +64,28 @@
         $mail = $_POST["mail"];
         $pass = $_POST["pass"];
 
-        if(empty($mail)){
+        if(empty($mail) or empty($pass) ){
             echo "<script> empty_input() </script>";
-        }
+        }else{
 
-        if(empty($pass)){
-            echo "<script> empty_input()  </script>";
-        }
+                if(validMail($mail)&&validPass($pass)){
 
+                    $user_session = new User("",$pass, $mail);
 
-        if(validMail($mail)&&validPass($pass)){
-
-                $user_session = new User("",$pass, $mail);
-
-                if($user_session->user_verify() === false or $user_session->pass_verify() === false ){
+                    if($user_session->user_verify() === false or $user_session->pass_verify() === false ){
+                        echo "<script> login_error()  </script>";
+                    }
+                    
+                    if($user_session->pass_verify()){
+                        $_SESSION["username"] = $user_session->get_username();
+                        $_SESSION["mail"]=$mail;
+                        $_SESSION["loggedin"] = true;
+                    }
+                }else{
                     echo "<script> login_error()  </script>";
                 }
-                
-                if($user_session->pass_verify()){
-                    $_SESSION["username"] = $user_session->get_username();
-                    $_SESSION["mail"]=$mail;
-                    $_SESSION["loggedin"] = true;
-                }
-        }else{
-                echo "<script> login_error()  </script>";
+
         }
-
-
     }
 
     if($_SESSION["loggedin"] === true && isset($_SESSION["loggedin"])){
