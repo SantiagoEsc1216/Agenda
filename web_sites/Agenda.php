@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Contactos</title>
 
     <link rel="stylesheet" href="../css/bootstrap.css">
@@ -66,8 +67,8 @@
             </ul>
 
             <form class="form-inline" method="post" action="">
-               <input type="search" class="form-control mr-sm-2" placeholder="Buscar contacto" aria-label="Buscar contacto">
-               <button class="btn btn-outline-success my-2- my-sm-0">Buscar</button>
+               <input type="search" class="form-control mr-sm-2" id="search_input" onclick="search_contact(this)" placeholder="Buscar contacto" aria-label="Buscar contacto">
+               <button class="btn btn-outline-success my-2- my-sm-0" id="btn_search" onclick="return false" >Buscar</button>
             </form>
 
             
@@ -97,10 +98,10 @@
        ?>
 
 
-            <div class="col col-md-3 col-xs-12 mt-2"  >
+            <div class="col col-12 col-md-4 col-lg-3 mt-2" >
                  
                 <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" >
-                        <div class="card"  id="<?php echo "card-".$i ?>">
+                        <div class="card" name="card" id=" <?php  echo "card-".$i ?>">
 
                                 <input type="hidden" name="id_div" value="<?php echo $i ?>">
 
@@ -123,7 +124,7 @@
                                 <button type="submit" class="btn btn-primary m-2" name="btn_accept" onclick="" style="display: none;" >Aceptar</button>
                             </div>
 
-                        </div>  
+                         </div>   
                     </form>
                     
                 </div>

@@ -111,9 +111,6 @@
     // insertar cards en el DOM 
     cards_container.appendChild(card_row);
     
-    function aa(){
-      
-    }
   }
 
 
@@ -220,3 +217,39 @@
     container.removeChild(alert);
 
   }
+
+
+ function search_contact(search_input){
+
+  const btn_search = document.getElementById("btn_search");
+  
+  search_input.addEventListener("change", search);
+  btn_search.addEventListener("click", search)
+
+   function search(){
+     let  input_name_contacts = document.getElementsByName("name_contact");
+
+      for (let index = 0; index < input_name_contacts.length; index++) {
+        const header = input_name_contacts[index].parentElement;
+        const card = header.parentElement;
+        const form = card.parentElement;
+        const div_parent = form.parentElement;
+       
+        const name_contact = input_name_contacts[index].value;
+
+        const match_name = name_contact.toLowerCase().indexOf(search_input.value.toLowerCase());
+   
+        if(match_name === -1){
+          div_parent.style.display = "none";
+        }else{
+          div_parent.style.display = "inline-block"
+        }
+
+        if(search_input.value == ""){
+         div_parent.style.display = "inline-block";
+          console.log("aaa");
+       }
+    }
+  }
+
+ }
