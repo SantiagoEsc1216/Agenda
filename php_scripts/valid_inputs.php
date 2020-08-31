@@ -1,11 +1,12 @@
 <?php 
-   $cararteresAdmitidos="/^[a-zA-Z0-9 ]*$/";
+   $cararteresAdmitidos="/^[a-zA-Zá-ýÁ-Ý0-9\u{00f1}\u{00d1}\(\)+ ]+$/";
    $imageTypes= array(
        "image/jpeg",
-       "image/jpg"
+       "image/jpg",
+       "image/png"
    );
    $imageSizeMax = 2097152; //2 MB
-   $Post_max_size=8388608 ; //8MB en php.ini
+  
 
    
 function validName($user){
@@ -34,17 +35,9 @@ function validMail($mail_input){
     }
 }
 
-function cleanInput($input){
-
-    $input= trim($input);
-    $input= stripslashes($input);
-    $input= htmlspecialchars($input);
-    return $input;
-}
-
 function validPhone($PhoneNumber){
 
-    if(!preg_match("/[0-9]+/", $PhoneNumber)){
+    if(!preg_match("/^[0-9\+\- ]{10,18}$/", $PhoneNumber)){
         global $phoneError;
         $phoneError="Introduzca un numero de telefono valido";
         return false;
@@ -54,27 +47,23 @@ function validPhone($PhoneNumber){
 }
 
 function validImage(){
-    global $imageTypes, $imageSizeMax, $imgError;
-    
- $Errors= array();
+    global $imageTypes, $imageSizeMax;
 
- if($_FILES["Imagen"]["size"] > $imageSizeMax){
-     array_push($Errors,"Tamaño maximo 2Mb "); 
-  
- }
-
- if((!in_array($_FILES["Imagen"]["type"], $imageTypes))){
-     array_push($Errors, "Solo imagenes de tipo .Jpeg y .Jpg ");       
- }
-
- if(sizeof($Errors)>0){
-    $imgError = implode(" ,", $Errors);
-     
-     return false;   
-   
- }else{
-     return true;
+    if($_FILES["Imagen"]["size"] > $imageSizeMax or !in_array($_FILES["Imagen"]["type"], $imageTypes)){
+        return false;
+    }else{
+        return true;
     }
 
+
 }
+
+function cleanInput($input){
+
+    $input= trim($input);
+    $input= stripslashes($input);
+    $input= htmlspecialchars($input);
+    return $input;
+}
+
 ?>

@@ -19,7 +19,7 @@
     
     <?php
          
-        require("../php_scripts/user.php");       
+        require_once("../php_scripts/user.php");       
 
         session_start();
 
@@ -47,7 +47,7 @@
             <ul class="navbar-nav mr-auto ">
 
                     <li class="nav-item active">
-                        <a class="nav-link" href="NuevoContacto.php">Crear nuevo contacto <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="new_contact.php">Crear nuevo contacto <span class="sr-only">(current)</span></a>
                     </li>
 
                     <li class="nav-item dropdown">
@@ -101,7 +101,7 @@
             <div class="col col-12 col-md-4 col-lg-3 mt-2" >
                  
                 <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" >
-                        <div class="card" name="card" id=" <?php  echo "card-".$i ?>">
+                        <div class="card" name="card" id="<?php  echo "card-".$i ?>">
 
                                 <input type="hidden" name="id_div" value="<?php echo $i ?>">
 
@@ -117,10 +117,10 @@
                             </div>
                 
                             <div class="card-footer text-center" id ="<?php echo "card-footer-".$i ?>">
-                                <button type="submit" class="btn btn-primary m-2" id="<?php echo $i ?>"  onclick=" return edit_options(<?php echo $i ?>)"  name="btn_edit" >Editar</button>
+                                <button type="button" class="btn btn-primary m-2" onclick="edit_options(<?php echo $i; ?>)"  name="btn_edit" >Editar</button>
                                 <button type="submit" class="btn btn-danger m-2"  name="btn_delete" >Eliminar</button>
 
-                                <button class="btn btn-danger m-2" name="btn_cancel" id="<?php echo $i ?>" onclick="" style="display: none;" >Cancelar</button>
+                                <button type="button" class="btn btn-danger m-2" name="btn_cancel" onclick="edit_cancel(<?php echo $i; ?>)" style="display: none;" >Cancelar</button>
                                 <button type="submit" class="btn btn-primary m-2" name="btn_accept" onclick="" style="display: none;" >Aceptar</button>
                             </div>
 
@@ -145,8 +145,8 @@
         
         if($_SERVER["REQUEST_METHOD"]=="POST"){
         
-            require "../php_scripts/Contact.php";
-            require "../php_scripts/valid_inputs.php";
+            require_once "../php_scripts/Contact.php";
+            require_once "../php_scripts/valid_inputs.php";
           
         
             if(isset($_POST["btn_delete"])){

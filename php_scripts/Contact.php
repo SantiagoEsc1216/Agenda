@@ -21,14 +21,6 @@ class Contact{
     } 
 
 
-   function valid_inputs(){
-        
-
-        echo  $this->Name_contact;
-        echo  $this->Mail_contact;
-        echo  $this->Phone_contact;
-
-    }
     
      function Add_contact(){
 
@@ -39,7 +31,7 @@ class Contact{
                 $this->Img_contact="Default.png";
                     }else{
                             if(validImage()){
-                                move_uploaded_file( $_FILES["Imagen"]["tmp_name"],__DIR__."\Imagenes/". $_FILES["Imagen"]["name"]);
+                                move_uploaded_file( $_FILES["Imagen"]["tmp_name"],$_SERVER["DOCUMENT_ROOT"]."/Agenda/Imagenes/".$_FILES["Imagen"]["name"]);
                             $this->Img_contact=$_FILES["Imagen"]["name"]; 
                             }else{
                                 $this->Img_state=false;
@@ -66,7 +58,6 @@ class Contact{
                     $stmt-> bindValue(":Img", $this->Img_contact);
 
                     $stmt-> execute();
-
                     $conn=null;
 
                     return true;
@@ -189,11 +180,11 @@ class Contact{
                                             AND 
                                             id_user = :id_u");
 
-                  $stmt-> bindValue(":name", $this->Name_contact, PDo::PARAM_STR);
-                  $stmt-> bindValue(":phone",$this->Phone_contact, PDO::PARAM_INT);
-                  $stmt-> bindValue(":mail", $this->Mail_contact, PDo::PARAM_STR);
-                  $stmt-> bindValue(":id_c", $id_contact,  PDO::PARAM_INT);
-                  $stmt-> bindValue(":id_u", $id_user,  PDO::PARAM_INT );
+                  $stmt-> bindValue(":name", $this->Name_contact);
+                  $stmt-> bindValue(":phone",$this->Phone_contact);
+                  $stmt-> bindValue(":mail", $this->Mail_contact);
+                  $stmt-> bindValue(":id_c", $id_contact);
+                  $stmt-> bindValue(":id_u", $id_user);
               
                 $stmt-> execute();
 
