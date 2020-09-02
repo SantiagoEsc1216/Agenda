@@ -113,6 +113,30 @@
     
   }
 
+  
+
+  function confirm_delete(id){
+    const div_delete = document.getElementById("div-delete-"+id);
+
+    div_delete.style.display = "inline-block";
+
+  }
+  
+  function cancel_delete(id){
+    const div_delete = document.getElementById("div-delete-"+id);
+
+    div_delete.style.display = "none";
+
+  }
+
+  function delete_contact(id){
+    const card = document.getElementById("card-"+id);
+    const form = card.parentElement;
+    const div_flex = form.parentElement;
+
+    div_flex.style.display = "none";
+
+  }
 
   function edit_options(id){
 
@@ -140,12 +164,11 @@
 
     card.style.zIndex = "100"
     
-    return false;
+    
   }
 
-  function edit_cancel(button){
+  function edit_cancel(id){
 
-    const id = button.id;
     const card = document.getElementById("card-"+id);
     const card_header = document.getElementById("card-header-"+id);
     const card_body = document.getElementById("card-body-"+id);
@@ -174,7 +197,7 @@
 
     message("Contacto editado", "success")
     setTimeout(delete_message, 5000);
-    
+    window.location.reload;
   }
 
     function edit_error(){
@@ -238,6 +261,7 @@
         const name_contact = input_name_contacts[index].value;
 
         const match_name = name_contact.toLowerCase().indexOf(search_input.value.toLowerCase());
+        console.log(match_name);
    
         if(match_name === -1){
           div_parent.style.display = "none";
@@ -247,8 +271,8 @@
 
         if(search_input.value == ""){
          div_parent.style.display = "inline-block";
-          console.log("aaa");
        }
+
     }
   }
 

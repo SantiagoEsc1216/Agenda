@@ -98,18 +98,20 @@
        ?>
 
 
-            <div class="col col-12 col-md-4 col-lg-3 mt-2" >
+            <div class="col col-12 col-md-4 col-lg-3 align-items-stretch mt-2" >
                  
                 <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" >
+                   
                         <div class="card" name="card" id="<?php  echo "card-".$i ?>">
 
-                                <input type="hidden" name="id_div" value="<?php echo $i ?>">
+                            <input type="hidden" name="id_div" value="<?php echo $i ?>">
 
                             <div class="card-header" id="<?php echo "card-header-".$i ?>">
                                 <input name="name_contact" type="text" class="form-control" readonly value="<?php  echo $Contact["Name_Contact"]; ?>"> 
                             </div>
 
                             <img src="../Imagenes/<?php echo $Contact["Img_Contact"]?>" alt="card image top" class="card-img-top" style="width:100%; height:25vh; object-fit:cover; ">
+                            <input type="hidden" name="img_name" value="<?php echo $Contact["Img_Contact"]?>">
 
                             <div class="card-body" id="<?php echo "card-body-".$i ?>" >
                                 <input  name="mail_contact" type="text" class="form-control card-text" readonly value="<?php   echo $Contact["Mail_Contact"]; ?>"> 
@@ -118,15 +120,24 @@
                 
                             <div class="card-footer text-center" id ="<?php echo "card-footer-".$i ?>">
                                 <button type="button" class="btn btn-primary m-2" onclick="edit_options(<?php echo $i; ?>)"  name="btn_edit" >Editar</button>
-                                <button type="submit" class="btn btn-danger m-2"  name="btn_delete" >Eliminar</button>
+                                <button type="button" class="btn btn-danger m-2" onclick="confirm_delete(<?php echo $i; ?>)"  name="btn_delete" >Eliminar</button>
 
                                 <button type="button" class="btn btn-danger m-2" name="btn_cancel" onclick="edit_cancel(<?php echo $i; ?>)" style="display: none;" >Cancelar</button>
                                 <button type="submit" class="btn btn-primary m-2" name="btn_accept" onclick="" style="display: none;" >Aceptar</button>
                             </div>
 
+                            <div id="div-delete-<?php echo $i?>"  class="div_delete container mw-100">
+                                <div class="row align-items-center" style="height: 100%;">
+                                        <div class="col col-12">
+                                            <p class="text-center">¿Estas seguro de eliminar el contacto?</p>
+                                            <button type="button" class="btn btn-primary btn-block" onclick="cancel_delete(<?php echo $i?>)">Cancelar</button>
+                                            <button type="submit" class="btn btn-danger btn-block" name="btn_confirm_delete" >Eliminar</button>
+                                        </div>
+                                 </div>
+                             </div>
+
                          </div>   
                     </form>
-                    
                 </div>
 
      <?php
@@ -136,7 +147,7 @@
                     }
      ?>
                 </div>
-
+ 
          </div>
      </div>
 
@@ -149,19 +160,23 @@
             require_once "../php_scripts/valid_inputs.php";
           
         
-            if(isset($_POST["btn_delete"])){
+            if(isset($_POST["btn_confirm_delete"])){
 
+                $id_div = $_POST["id_div"];
                 $name = $_POST["name_contact"];
                 $mail = $_POST["mail_contact"];
                 $phone = $_POST["phone_contact"];
+                $img = $_POST["img_name"];
 
-                if(empty($name) or empty($mail) or empty($phone) ){
+                if(empty($name) or empty($mail) or empty($phone) or empty($id_div) or empty($img)){
                     echo "<script> delete_error() </script>";
                 }else{
                     $thisContact=new Contact($name, $phone, $mail);
         
                     $idContact = $thisContact->Get_IDContact();
-                    $thisContact->Delete_contact($idContact);
+                    $thisContact->Delete_contact($idContact, $img);
+
+                    echo"<script> delete_contact($id_div) </script>";
                 }
             }
             

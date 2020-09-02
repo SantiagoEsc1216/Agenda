@@ -19,8 +19,8 @@
 <body>
     <?php
     
-    require ("../php_scripts/user.php");
-    require ("../php_scripts/valid_inputs.php");
+    require_once ("../php_scripts/user.php");
+    require_once ("../php_scripts/valid_inputs.php");
 
     $mailError = $userError = $passError = "";
     $mail = $user = $pass = "";

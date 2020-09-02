@@ -4,8 +4,17 @@ position: absolute;
 top: 0px;
 left: 0px;
 height:0%;
-width:0%;        /* hacemos que ocupe toda la pantalla a cualquier resolución*/
-z-index: 50;        /* lo colocamos por encima del resto de componentes*/
+width:0%;        
+z-index: 50;    
 background-color: #ffffff;
 opacity: 70%;
+}
+.div_delete{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;;
+    opacity: 90%;
+    display: none;
+    z-index: 2;
 }

@@ -70,7 +70,7 @@ class Contact{
      }
          
 
-     function Delete_contact($ID_Contact){
+     function Delete_contact($ID_Contact, $img){
         require ("ServerSql.php");
         require_once ("user.php");
 
@@ -89,9 +89,11 @@ class Contact{
                 $stmt-> bindValue(":ID_C", $ID_Contact);
                 $stmt->bindValue(":id_u", $id_user);
               
-
                 $stmt-> execute();
 
+                if($img != "Default.png"){
+                unlink($_SERVER["DOCUMENT_ROOT"]."/Agenda/Imagenes/".$img);
+            }
                 $conn=null;
 
                 return true;
