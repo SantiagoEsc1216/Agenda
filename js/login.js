@@ -1,17 +1,13 @@
+
 function visible_password(){
 
   const input_password = document.getElementById("pass");
 
     if(input_password.type === "password"){
-
         input_password.type = "text";
-
     }else{
-
         input_password.type = "password"
-
     }
-
 }
 
 function empty_input(){
@@ -20,41 +16,23 @@ function empty_input(){
 
 function login_error(){
 
-  let throw_error = true;
-
-  if (throw_error === true) {
     message("El usuario o contraseña es incorrecto", "danger");
     throw_error = false;
-  }
-
-  
 }
 
 
 function message(message, type){
 
-    const container = document.getElementById("div-form");
-    const inputs = document.getElementById("form");
-    let div = document.createElement("div");
-    let text = document.createTextNode(message);
+    const container = document.body;
 
-    div.setAttribute("class", "mx-auto alert alert-"+type);
-    div.setAttribute("id", "alert");
-   // div.style.width = "95%";
+  let div = document.createElement("div");
+  let text = document.createTextNode(message);
 
-    div.appendChild(text);
+  div.setAttribute("class", "div_alert alert alert-"+type);
+  div.setAttribute("id", "alert");
 
-    container.insertBefore(div, inputs);
+  div.appendChild(text);
 
-    }
-
-  
-
-  function delete_message(){
-
-    const container = document.getElementById("contacts-container");
-    const alert = document.getElementById("alert");
-    
-    container.removeChild(alert);
+  container.appendChild(div);
 
   }

@@ -13,7 +13,7 @@
 
 
     // class/style divs card
-    card_row.setAttribute("class", "col col-md-3 col-xs-12 mt-2" ) 
+    card_row.setAttribute("class", "col col-md-3 col-xs-12 mt-2" )
     card.setAttribute("class", "card");
     card_header.setAttribute("class", "card-header")
     card_body.setAttribute("class", "card-body")
@@ -100,7 +100,7 @@
     card_body.appendChild(p_phone);
     card_body.appendChild(p_mail);
 
-    
+
     card.setAttribute("id", "card_"+i);
     name_input.setAttribute("id", "name_"+i);
     mail_input.setAttribute("id", "mail_"+i);
@@ -108,25 +108,70 @@
     img.setAttribute("id", "img_"+i);
     btn_edit.setAttribute("id", i);
 
-    // insertar cards en el DOM 
+    // insertar cards en el DOM
     cards_container.appendChild(card_row);
-    
+
   }
 
-  
+  function form_contact(id){
+
+    const card_header = document.getElementById("card-header-"+id);
+    const card_body = document.getElementById("card-body-"+id);
+
+    const name_input = document.createElement("input");
+    name_input.setAttribute("class", "form-control");
+    name_input.setAttribute("name", "name_contact")
+    let name = card_header.childNodes[1];
+    name_input.setAttribute("value", name.innerHTML);
+
+    const mail_input = document.createElement("input");
+    mail_input.setAttribute("class", "form-control");
+    mail_input.setAttribute("name", "mail_contact")
+    let mail = card_body.childNodes[1];
+    mail_input.setAttribute("value", mail.innerHTML);
+
+    const phone_input = document.createElement("input");
+    phone_input.setAttribute("class", "form-control");
+    phone_input.setAttribute("name", "phone_contact")
+    let phone = card_body.childNodes[5];
+    phone_input.setAttribute("value", phone.innerHTML);
+
+    const img_input = document.createElement("input");
+    img_input.type = "file";
+    img_input.setAttribute("class", "form-control-file img_input");
+    img_input.setAttribute("name", "img_contact");
+
+
+
+
+          name.hidden = true;
+          card_header.appendChild(name_input);
+
+          mail.hidden = true;
+          card_body.appendChild(mail_input);
+
+          phone.hidden = true;
+          card_body.appendChild(phone_input);
+
+          const img_edit_div = document.getElementById("img-edit-"+id);
+          img_edit_div.hidden = false;
+          img_edit_div.appendChild(img_input);
+  }
 
   function confirm_delete(id){
     const div_delete = document.getElementById("div-delete-"+id);
 
     div_delete.style.display = "inline-block";
 
+    form_contact(id);
+
   }
-  
+
   function cancel_delete(id){
     const div_delete = document.getElementById("div-delete-"+id);
 
     div_delete.style.display = "none";
-
+    edit_cancel(id);
   }
 
   function delete_contact(id){
@@ -140,31 +185,58 @@
 
   function edit_options(id){
 
-
     const card = document.getElementById("card-"+id);
-    const card_header = document.getElementById("card-header-"+id);
-    const card_body = document.getElementById("card-body-"+id);
     const footer = document.getElementById("card-footer-"+id)
     const padlock = document.getElementById("padlock");
-
-
-  
-    card_header.children[0].readOnly = false;
-
-    card_body.children[0].readOnly = false;
-    card_body.children[1].readOnly = false;
 
     footer.children[0].style.display = "none";
     footer.children[1].style.display = "none";
     footer.children[2].style.display = "inline-block";
     footer.children[3].style.display = "inline-block";
 
-    padlock.style.width = "100%";
-    padlock.style.height = "100%";
+    const btn_edit = footer.children[3];
+
+    padlock.style.width = "100vw";
+    padlock.style.height = "100vh";
 
     card.style.zIndex = "100"
-    
-    
+
+    form_contact(id);
+  }
+
+  function confirm_edit(id){
+    const card = document.getElementById("card-"+id);
+    const card_header = document.getElementById("card-header-"+id);
+    const card_body = document.getElementById("card-body-"+id);
+    const footer = document.getElementById("card-footer-"+id);
+
+    const btn_submit = footer.childNodes[7];
+
+    const name_input = card_header.childNodes[5];
+    const name_info = card_header.childNodes[3];
+
+    const mail_input = card_body.childNodes[9];
+    const mail_info = card_body.childNodes[3];
+
+    const phone_input = card_body.childNodes[10]
+    const phone_info = card_body.childNodes[7];
+
+    const img_edit_div = card.childNodes[5].childNodes[1];
+    const img_input = img_edit_div.childNodes[3];
+    const img_info = img_edit_div.childNodes[1];
+
+    const a = valid_name(name_input, name_info);
+    const b = valid_mail(mail_input, mail_info);
+    const c = valid_phone(phone_input, phone_info);
+    const d = valid_img(img_input, img_info);
+
+    if(a === true && b === true && c === true && d === true){
+      unlock_button(btn_submit);
+
+    }else{
+      lock_button(btn_submit);
+    }
+
   }
 
   function edit_cancel(id){
@@ -173,11 +245,40 @@
     const card_header = document.getElementById("card-header-"+id);
     const card_body = document.getElementById("card-body-"+id);
     const footer = document.getElementById("card-footer-"+id)
-  
-    card_header.children[0].readOnly = true;
 
-    card_body.children[0].readOnly = true;
-    card_body.children[1].readOnly = true;
+    const name = card_header.childNodes[1];
+    name.hidden = false;
+
+    const mail = card_body.childNodes[1];
+    mail.hidden = false;
+
+    const phone = card_body.childNodes[5];
+    phone.hidden = false;
+
+    const name_input = card_header.childNodes[5];
+    const name_info = card_header.childNodes[3];
+    name_input.remove();
+    name_info.hidden = true;
+
+    const mail_input = card_body.childNodes[9];
+    const mail_info = card_body.childNodes[3];
+    mail_input.remove();
+    mail_info.hidden = true;
+
+    const phone_input = card_body.childNodes[9];
+    const phone_info = card_body.childNodes[7];
+    phone_input.remove();
+    phone_info.hidden = true;
+
+    const img_edit_div = card.childNodes[5].childNodes[1];
+    const img_input = img_edit_div.childNodes[3];
+    const img_info = img_edit_div.childNodes[1];
+    img_input.remove();
+    img_edit_div.hidden = true;
+    img_info.hidden = true;
+
+    const btn_submit = footer.childNodes[7];
+    unlock_button(btn_submit);
 
     footer.children[0].style.display = "inline-block";
     footer.children[1].style.display = "inline-block";
@@ -187,17 +288,18 @@
     padlock.style.width = "0%";
     padlock.style.height = "0%";
 
-    card.style.zIndex = "0"
-    
-    
-    return false;
+    card.style.zIndex = "0";
+
   }
 
   function edit_success(){
 
+
     message("Contacto editado", "success")
     setTimeout(delete_message, 5000);
-    window.location.reload;
+
+    location.reload(true);
+
   }
 
     function edit_error(){
@@ -208,7 +310,7 @@
 
     function delete_error(){
 
-      message("Error al eliminar contacto, intente recargar la pagina", "danger") 
+      message("Error al eliminar contacto, intente recargar la pagina", "danger")
 
     }
 
@@ -220,23 +322,22 @@
     let div = document.createElement("div");
     let text = document.createTextNode(message);
 
-    div.setAttribute("class", "mx-auto alert alert-"+type);
+    div.setAttribute("class", "alert alert-"+type);
     div.setAttribute("id", "alert")
-   // div.style.width = "95%";
 
     div.appendChild(text);
 
-    container.insertBefore(div, contacts)
+    document.body.appendChild(div);
 
     }
 
-  
+
 
   function delete_message(){
 
     const container = document.getElementById("contacts-container");
     const alert = document.getElementById("alert");
-    
+
     container.removeChild(alert);
 
   }
@@ -245,7 +346,7 @@
  function search_contact(search_input){
 
   const btn_search = document.getElementById("btn_search");
-  
+
   search_input.addEventListener("change", search);
   btn_search.addEventListener("click", search)
 
@@ -257,12 +358,11 @@
         const card = header.parentElement;
         const form = card.parentElement;
         const div_parent = form.parentElement;
-       
+
         const name_contact = input_name_contacts[index].value;
 
         const match_name = name_contact.toLowerCase().indexOf(search_input.value.toLowerCase());
-        console.log(match_name);
-   
+
         if(match_name === -1){
           div_parent.style.display = "none";
         }else{
@@ -276,4 +376,92 @@
     }
   }
 
+ }
+
+ function valid_name(name_input, name_info){
+
+  let re = /^[a-zA-Zá-ýÁ-Ý0-9\u00f1\u00d1\(\)+ ]+$/;
+
+  let match_invalid_character = name_input.value.match(re);
+
+  if(match_invalid_character === null){
+      name_info.hidden = false;
+      return false;
+
+  }else{
+      name_info.hidden = true;
+      return true;
+  }
+}
+
+function valid_mail(mail_input, mail_info){
+  let re = /^([a-zA-Z-0-9_\.-]+)@([a-z_\.-]+)\.([a-z\.]{2,6})$/;
+
+  let match_invalid_character = mail_input.value.match(re);
+
+  if(match_invalid_character === null){
+      mail_info.hidden = false;
+
+      return false;
+
+  }else{
+      mail_info.hidden = true;
+
+      return true;
+
+  }
+}
+
+function valid_phone(phone_input, phone_info){
+  let re = /^[0-9\+\- ]{10,18}$/;
+  let match_invalid_character = phone_input.value.match(re);
+
+  if(match_invalid_character === null){
+      phone_info.hidden = false;
+      return false;
+
+  }else{
+      phone_info.hidden = true;
+      return true;
+
+  }
+}
+
+function valid_img(img_input, img_info){
+  let re = /^(image\/)+(jpeg||png)$/
+
+  if(img_input.value === ""){
+
+      return true;
+  }else{
+      let img_type = img_input.files[0].type;
+      let img_size = img_input.files[0].size;
+
+      let match_invalid_character = img_type.match(re);
+
+      if(match_invalid_character === null || img_size > 2097152){
+          img_info.hidden = false;
+          return false;
+
+      }else{
+          img_info.hidden = true;
+          return true;
+
+          }
+  }
+
+}
+
+function lock_button(btn_submit){
+  const submit_class = btn_submit.classList;
+  btn_submit.type = "button";
+  submit_class.remove("btn-primary");
+  submit_class.add("btn-danger");
+ }
+
+ function unlock_button(btn_submit){
+  const submit_class = btn_submit.classList;
+  btn_submit.type = "submit";
+  submit_class.remove("btn-danger");
+  submit_class.add("btn-primary");
  }

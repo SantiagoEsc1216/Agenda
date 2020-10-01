@@ -1,32 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
- 
+
     <title>Agregar contacto</title>
 
-   
-
-<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="stylesheet" href="../css/bootstrap.css">
 
-    <script src="../js/jquery.min.js"></script> 
-    <script src="../js/popper.min.js"></script> 
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/popper.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/valid_inputs.js"></script>
 
 </head>
 <body onload="valid_inputs()" >
   <?php
-  session_start();
+    session_start();
+
+    if(empty($_SESSION["username"]) or empty($_SESSION["mail"]) or empty($_SESSION["loggedin"])){
+        header("location: login.php");
+    }
   ?>
 
                     <!------------------------------- Navbar ------------------------------------->
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        
+
         <a class="navbar-brand" href="Agenda.php">Agenda</a>
 
         <button class="navbar-toggler" data-target="#my-nav" data-toggle="collapse" aria-controls="my-nav" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,13 +43,13 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" aria-label="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
-                            <?php echo $_SESSION["username"] ?> 
+                        <a class="nav-link dropdown-toggle" href="#" aria-label="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <?php echo $_SESSION["username"] ?>
                         </a>
-                        
+
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            
-                            <a href="#" class="dropdown-item">Perfil</a>
+
+                            <a href="profile.php" class="dropdown-item">Perfil</a>
                                 <div class="dropdown-divider"></div>
                             <a href="closeSession.php" class="dropdown-item">Cerrar sesion</a>
 
@@ -61,7 +63,7 @@
                <button class="btn btn-outline-success my-2- my-sm-0">Buscar</button>
             </form>
 
-            
+
         </div>
     </nav>
 
@@ -73,7 +75,7 @@
             <form action="<?php htmlspecialchars('addContact.php')  ?>" method="POST" enctype="multipart/form-data">
 
                 <div class="form-group">
-                    <label for="name_contact">Nombre:</label> 
+                    <label for="name_contact">Nombre:</label>
                     <input type="text" name="name_contact" id="input_name" class="form-control" required>
                     <small id="name_info" class="form-text text-muted">Solo letras, numeros y parentesis</small>
                 </div>
@@ -85,14 +87,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="phone_contact">Telefono:</label> 
+                    <label for="phone_contact">Telefono:</label>
                     <input type="tel" name="phone_contact" id="input_phone" class="form-control" required >
-                    <small id="phone_info" class="form-text text-muted">Solo numeros, parentesis y los caracteres (+) y (-)</small>
+                    <small id="phone_info" class="form-text text-muted">Solo numero (10 digitos), parentesis y los caracteres (+) y (-)</small>
                 </div>
 
                 <div class="form-group">
                     <label for="Imagen">Imagen de contacto (opcional):</label>
-                    <input type="file" name="Imagen" id="input_img" class="form-control" accept="image/jpeg, image/png">
+                    <input type="file" name="img_contact" id="input_img" class="form-control" accept="image/jpeg, image/png">
                     <small id="img_info" class="form-text text-muted">Imagen no mayor a 2 MB y en formato jpg o png</small>
                 </div>
 
@@ -102,38 +104,33 @@
         </div>
     </div>
 
-    <?php
+<?php
      require_once ("../php_scripts/valid_inputs.php");
- 
+
     if($_SERVER["REQUEST_METHOD"]=="POST"){
-    
+
      $name = $_POST["name_contact"];
      $mail = $_POST["mail_contact"];
      $phone = $_POST["phone_contact"];
- 
-        if(empty($name) or empty($mail) or empty($phone)){
-             echo "<script> message('rellene todos los campos', 'danger') </script>";
-        }else{
-            
-            if(validName($name) && validMail($mail) && validPhone($phone)){
-     
-                require_once ("../php_scripts/Contact.php");
-                
-                $Contact = new Contact($name, $phone, $mail);
+     $img = $_FILES["img_contact"]["name"];
 
-                 if ($Contact-> Add_contact()){
-                    echo "<script> message('Contacto agregado', 'success') </script>";
-                    echo "<script> clean_inputs() </script>";
-                }else{
+        if(validName($name) && validMail($mail) && validPhone($phone)){
+
+            require_once ("../php_scripts/Contact.php");
+
+            $Contact = new Contact($name, $phone, $mail, $img);
+
+            if ($Contact-> Add_contact()){
+                echo "<script> message('Contacto agregado', 'success') </script>";
+                echo "<script> clean_inputs() </script>";
+            }else{
                    echo "<script>message('Error al agregar contacto', 'danger')</script>";
-                    }
-           }else{
-            echo "<script>message('Error al agregar contacto', 'danger')</script>";
-           }
+                }
+        }else{
+            echo "<script> message('Revise que los campos esten completos y que no contengan caracteres especiales', 'danger')  </script>";
         }
  }
-    
-    ?>
+?>
 
 </body>
 </html>

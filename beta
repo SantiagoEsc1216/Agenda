@@ -1,0 +1,22 @@
+This beta version contains a full functional version of my project "Agenda", my first project in php and
+my first real completely  website aplication.
+
+Only have to debugging and add a Readme document and the documentation to finish the project.
+
+The changes that ocurred since the last commit are:
+
+-The form of edit contact and delect contact now it's created whith javascript at time of click in the button
+of "Editar" or "Eliminar" with the function "form_contact" in the file "ContactOptions.js".
+
+-The profile options was added in the file "profile.php", this file have one base form and this it's modified
+depending of the option that select the user. The funcions to modified the database are change_password(),
+change_username() and change_mail() and it's are inside the file "user.php" in the folder of php_scripts.
+
+-valid inputs php update, now the regular expresions are the same that in the frontend
+except valid_mail(), that it's validate with the funcion filter_var with the filter_validate_email.
+And now detects if the input it's empty.
+
+- The signup page, now have a javascript file to validate the inputs.
+
+- The edit contact funcion now can modify the image contact and delete the image of that was modified.
+and the delete contact function delete the image of folder "Imagenes".

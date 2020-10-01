@@ -1,4 +1,7 @@
-<?php 
+<?php
+
+use function PHPSTORM_META\type;
+
 require_once "valid_inputs.php";
 
 class User{
@@ -16,7 +19,7 @@ function __construct($user, $pass, $mail){
 
 function Insert(){
 
-    include("ServerSql.php");
+    include("server_sql.php");
 
     try{
         $conn=new PDO($dns, $db_username, $db_password);
@@ -29,7 +32,11 @@ function Insert(){
         $stmt->bindValue(":Pass", password_hash($this->pass, PASSWORD_DEFAULT) );
         $stmt->bindValue(":Mail", $this->mail);
 
-        $stmt->execute();
+        if($stmt->execute()){
+            return true;
+        }else{
+            return false;
+        }
 
         $conn= null;
 
@@ -37,13 +44,14 @@ function Insert(){
 
     catch(PDOException $e){
         echo "error: ".$e->getMessage();
+        return false;
     }
 
  }
 
- function user_verify(){
+ function mail_verify(){
 
-    include("ServerSql.php");
+    include("server_sql.php");
 
     try{
         $conn=new PDO($dns, $db_username, $db_password);
@@ -55,7 +63,7 @@ function Insert(){
         $stmt->execute();
 
         $RowNumber= $stmt->rowCount();
-        
+
         if($RowNumber>0){
             return false;
         }else{
@@ -63,7 +71,7 @@ function Insert(){
         }
         $conn=null;
 
-       
+
     }
 
     catch(PDOException $e){
@@ -73,64 +81,64 @@ function Insert(){
 }
 
     function pass_verify(){
-        include("ServerSql.php");
+        include("server_sql.php");
 
         try{
             $conn=new PDO($dns, $db_username, $db_password);
-    
+
             $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
+
             $stmt = $conn->prepare("SELECT Password From Users where Mail = :Mail" );
             $stmt->bindValue(":Mail", $this->mail);
             $stmt->execute();
-    
+
            $hash=$stmt->fetchColumn();
-            
-            
-            
+
+
+
             if(password_verify($this->pass, $hash)){
                 return true;
             }else{
                 return false;
             }
             $conn=null;
-            
+
         }
-    
+
         catch(PDOException $e){
             echo "error: ".$e->getMessage();
         }
     }
 
     function get_username(){
-        include("ServerSql.php");
+        include("server_sql.php");
 
         try{
             $conn=new PDO($dns, $db_username, $db_password);
-    
+
             $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
+
             $stmt = $conn->prepare("SELECT Username From Users where Mail = :Mail" );
             $stmt->bindValue(":Mail", $this->mail);
             $stmt->execute();
-            
+
             $nombre=$stmt->fetchColumn();
             return $nombre;
 
             $conn=null;
         }
-    
+
         catch(PDOException $e){
             echo "error: ".$e->getMessage();
         }
     }
 
     function Get_ID(){
-        include("ServerSql.php");
-        
+        include("server_sql.php");
+
             try{
                 $conn=new PDO($dns, $db_username, $db_password);
-        
+
                 $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $stmt = $conn->prepare("SELECT ID from Users where Mail = :Mail");
 
@@ -139,11 +147,11 @@ function Insert(){
 
                 $ID_User =  $stmt->fetchColumn();
 
-                return $ID_User;
+                return (int)$ID_User;
 
                 $conn = null;
             }
-        
+
             catch(PDOException $e){
                 echo "error: ".$e->getMessage();
             }
@@ -151,7 +159,7 @@ function Insert(){
 
     function get_contacts($ID_User){
 
-       include("ServerSql.php");
+       include("server_sql.php");
 
        try{
         $conn=new PDO($dns, $db_username, $db_password);
@@ -168,17 +176,16 @@ function Insert(){
 
         $conn = null;
     }
-    
     catch(PDOException $e){
         echo "error: ".$e->getMessage();
     }
     }
 
     function get_numberOfContacts($ID_User){
-        include("ServerSql.php");
+        include("server_sql.php");
         try{
             $conn=new PDO($dns, $db_username, $db_password);
-    
+
             $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $stmt = $conn->prepare("SELECT count(Name_Contact) from Contact where ID_user = :Id_u");
 
@@ -191,13 +198,93 @@ function Insert(){
 
             $conn = null;
         }
-    
+
         catch(PDOException $e){
             echo "error: ".$e->getMessage();
         }
 
     }
+
+
+function change_password($id_user, $new_pass){
+    require("server_sql.php");
+    try{
+        $conn = new PDO($dns, $db_username, $db_password);
+
+        $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $stmt = $conn-> prepare("UPDATE users set Password = :new_pass WHERE ID = :id_user");
+
+        $stmt-> bindValue(":new_pass", password_hash($new_pass, PASSWORD_DEFAULT));
+        $stmt-> bindValue(":id_user", $id_user);
+
+        if($stmt-> execute()){
+            return true;
+        }else{
+            return false;
+        }
+
+        $conn = null;
+
+    }
+
+    catch(PDOException $e){
+        echo "error: ".$e->getMessage();
+    }
 }
 
+function change_username($id_user, $new_username){
+    require("server_sql.php");
+    try{
+        $conn = new PDO($dns, $db_username, $db_password);
+
+        $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $stmt = $conn->prepare("UPDATE users set Username = :new_username WHERE ID = :id_user");
+
+        $stmt-> bindValue(":new_username", $new_username, PDO::PARAM_STR);
+        $stmt-> bindValue(":id_user", $id_user, PDO::PARAM_INT);
+
+        if($stmt-> execute()){
+            return true;
+        }else{
+            return false;
+        }
+
+        $conn=null;
+
+    }
+
+    catch(PDOException $e){
+        echo "error: ".$e->getMessage();
+        return false;
+    }
+}
+
+function change_mail($id_user, $new_mail){
+    require("server_sql.php");
+    try{
+        $conn = new PDO($dns, $db_username, $db_password);
+
+        $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $stmt = $conn-> prepare("UPDATE users set Mail = :new_mail WHERE ID = :id_user");
+
+        $stmt-> bindValue(":new_mail", $new_mail);
+        $stmt-> bindValue(":id_user", $id_user);
+
+        if($stmt-> execute()){
+            return true;
+        }else{
+            return false;
+        }
+
+        $conn = null;
+
+    }
+
+    catch(PDOException $e){
+        echo "error: ".$e->getMessage();
+    }
+}
+
+}
 
 ?>
