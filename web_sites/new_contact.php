@@ -106,17 +106,16 @@
 
 <?php
      require_once ("../php_scripts/valid_inputs.php");
+     require_once ("../php_scripts/Contact.php");
 
     if($_SERVER["REQUEST_METHOD"]=="POST"){
 
      $name = $_POST["name_contact"];
      $mail = $_POST["mail_contact"];
      $phone = $_POST["phone_contact"];
-     $img = $_FILES["img_contact"]["name"];
+     $img = $_FILES["img_contact"];
 
-        if(validName($name) && validMail($mail) && validPhone($phone)){
-
-            require_once ("../php_scripts/Contact.php");
+        if(validName($name) && validMail($mail) && validPhone($phone) && validImage($img)){
 
             $Contact = new Contact($name, $phone, $mail, $img);
 
@@ -127,6 +126,8 @@
                    echo "<script>message('Error al agregar contacto', 'danger')</script>";
                 }
         }else{
+
+            echo $img["type"]."a";
             echo "<script> message('Revise que los campos esten completos y que no contengan caracteres especiales', 'danger')  </script>";
         }
  }

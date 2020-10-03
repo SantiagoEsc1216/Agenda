@@ -27,13 +27,13 @@ class Contact{
             require ("server_sql.php");
             require_once ("user.php");
 
-            if($this->Img_contact == ""){
-                $this->Img_contact="Default.png";
-                    }
+            if($this->Img_contact["name"] == ""){
+                $this->Img_contact["name"]="Default.png";
+            }
 
-        if(validImage($_FILES["img_contact"]) or $this->Img_contact == "Default.png" ){
-
-            move_uploaded_file( $_FILES["img_contact"]["tmp_name"],$_SERVER["DOCUMENT_ROOT"]."/Agenda/Imagenes/".$_FILES["img_contact"]["name"]);
+        if($this->Img_contact != "Default.png"){
+            move_uploaded_file( $this->Img_contact["tmp_name"],$_SERVER["DOCUMENT_ROOT"]."/Agenda/Imagenes/".$this->Img_contact["name"]);
+        }
 
                 $User = new User("","","");
                 $IdUser=$User->Get_ID();
@@ -50,20 +50,23 @@ class Contact{
                     $stmt-> bindValue(":Phone",$this->Phone_contact);
                     $stmt-> bindValue(":Mail", $this->Mail_contact);
                     $stmt-> bindValue(":ID_U", $IdUser );
-                    $stmt-> bindValue(":Img", $this->Img_contact);
+                    $stmt-> bindValue(":Img", $this->Img_contact["name"]);
 
                     $stmt-> execute();
-                    $conn=null;
 
-                    return true;
+                    if($stmt->rowCount()>0){
+                        return true;
+                    }else{
+                        return false;
+                    }
+
+                    $conn=null;
                 }
 
                 catch(PDOException $e){
                     echo $e;
+                    return false;
                 }
-        }else{
-            return false;
-        }
      }
 
 
@@ -84,14 +87,15 @@ class Contact{
                 $stmt = $conn->prepare("DELETE FROM Contact WHERE ID_Contact = :ID_C AND ID_user = :id_u");
 
                 $stmt-> bindValue(":ID_C", $ID_Contact);
-                $stmt->bindValue(":id_u", $id_user);
+                $stmt-> bindValue(":id_u", $id_user);
 
-                if($stmt-> execute()){
+                $stmt-> execute();
 
-                    if($this->Img_contact != "Default.png"){
+                if($stmt-> rowCount()==1){
+                    echo $this->img_count($this->Img_contact);
+                    if($this->Img_contact != "Default.png" && $this->img_count($this->Img_contact) == 0){
                         unlink($_SERVER["DOCUMENT_ROOT"]."/Agenda/Imagenes/".$this->Img_contact);
                     }
-
                     return true;
                 }else{
                     return false;
@@ -107,103 +111,26 @@ class Contact{
 
      }
 
-     function Get_IDContact(){
-        require ("server_sql.php");
-        require_once ("user.php");
-
-
-            $User = new User("","","");
-            $IdUser=$User->Get_ID();
-
-            try{
-
-                $conn = new PDO($dns, $db_username, $db_password);
-
-                $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-                $stmt = $conn->prepare("SELECT ID_Contact FROM contact where Name_Contact = :Name AND Phone_Contact = :Phone AND Mail_Contact = :Mail AND Img_Contact = :Img AND ID_user = :ID_U");
-
-                $stmt-> bindValue(":Name", $this->Name_contact);
-                $stmt-> bindValue(":Phone",$this->Phone_contact);
-                $stmt-> bindValue(":Mail", $this->Mail_contact);
-                $stmt-> bindValue(":Img", $this->Img_contact);
-                $stmt-> bindValue(":ID_U", $IdUser );
-
-                $stmt-> execute();
-
-                $Id_Contact = $stmt->fetchColumn();
-
-                return $Id_Contact;
-
-                $conn=null;
-
-            }
-
-            catch(PDOException $e){
-                echo $e;
-            }
-
-     }
-
-
-
-
-    function edit_contact($id_contact){
+    function edit_contact($id_contact, $name_old_img){
 
         require ("server_sql.php");
         require_once ("user.php");
 
-
-            $User = new User("","","");
-            $id_user = $User->Get_ID();
-
             try{
-                $conn = new PDO($dns, $db_username, $db_password);
+                $User = new User("","","");
+                $id_user = $User->Get_ID();
 
+                $conn = new PDO($dns, $db_username, $db_password);
                 $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                if($_FILES["img_contact"]["size"]>0){
-
-                    if(validImage($_FILES["img_contact"])){
-                        $new_image = $_FILES["img_contact"]["name"];
-                        move_uploaded_file( $_FILES["img_contact"]["tmp_name"],$_SERVER["DOCUMENT_ROOT"]."/Agenda/Imagenes/".$new_image);
-
-                        $sql_image = "UPDATE contact SET Name_Contact = :name, Phone_Contact = :phone,
-                        Mail_Contact = :mail, Img_Contact = :img WHERE ID_Contact = :id_c AND id_user = :id_u";
-
-                        $stmt = $conn->prepare($sql_image);
-
-                        $stmt-> bindValue(":name", $this->Name_contact);
-                        $stmt-> bindValue(":phone",$this->Phone_contact);
-                        $stmt-> bindValue(":mail", $this->Mail_contact);
-                        $stmt-> bindValue(":img", $new_image);
-                        $stmt-> bindValue(":id_c", $id_contact);
-                        $stmt-> bindValue(":id_u", $id_user);
-
-                        if($stmt-> execute()){
-                            if($this->Img_contact != "Default.png"){
-                                unlink($_SERVER["DOCUMENT_ROOT"]."/Agenda/Imagenes/".$this->Img_contact);
-                             }
-                            return true;
-                        }else{
-                            return false;
-                        }
-                    }else{
-                        return false;
-                    }
-
-                }else{
-
-                    $sql_no_image = "UPDATE contact SET
+                    $stmt = $conn->prepare("UPDATE contact SET
                     Name_Contact = :name,
                     Phone_Contact = :phone,
                     Mail_Contact = :mail
                     WHERE
                     ID_Contact = :id_c
                     AND
-                    id_user = :id_u";
-
-                    $stmt = $conn->prepare($sql_no_image);
+                    id_user = :id_u");
 
                     $stmt-> bindValue(":name", $this->Name_contact);
                     $stmt-> bindValue(":phone",$this->Phone_contact);
@@ -211,12 +138,12 @@ class Contact{
                     $stmt-> bindValue(":id_c", $id_contact);
                     $stmt-> bindValue(":id_u", $id_user);
 
-                    if($stmt-> execute()){
-                        return true;
-                    }else{
-                        return false;
+                    $stmt-> execute();
+                    if($this->Img_contact["size"]>0){
+                        $this->edit_img($id_contact, $name_old_img, $id_user);
                     }
-                }
+                    echo $stmt->rowCount();
+
                 $conn=null;
             }
 
@@ -225,6 +152,56 @@ class Contact{
                 return false;
             }
 
+    }
+
+    private function edit_img($id_contact, $name_old_img, $id_user){
+        require("server_sql.php");
+        try{
+
+            $conn = new PDO($dns, $db_username, $db_password);
+            $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $stmt = $conn->prepare("UPDATE contact set Img_Contact = :new_img where ID_Contact = :id_c AND ID_user = :id_u");
+
+            $stmt-> bindValue(":new_img", $this->Img_contact["name"]);
+            $stmt-> bindValue(":id_c", $id_contact);
+            $stmt-> bindValue(":id_u", $id_user);
+
+            $stmt->execute();
+
+            if($stmt->rowCount() == 1){
+                if($name_old_img != "Default.png" && $this->img_count($name_old_img) == 0){
+                    unlink($_SERVER["DOCUMENT_ROOT"]."/Agenda/Imagenes/".$name_old_img);
+                }
+                move_uploaded_file( $this->Img_contact["tmp_name"],$_SERVER["DOCUMENT_ROOT"]."/Agenda/Imagenes/".$this->Img_contact["name"]);
+            }
+        }catch(PDOException $e){
+            echo $e;
+        }
+    }
+
+    private function img_count($img_name){
+        require("server_sql.php");
+
+        try{
+
+            $conn = new PDO($dns, $db_username, $db_password);
+            $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $stmt = $conn->prepare("SELECT Img_Contact FROM contact where Img_Contact = :img");
+
+            $stmt-> bindValue((":img"), $img_name);
+
+            $stmt-> execute();
+
+            return $stmt->rowCount();
+
+            $conn = null;
+
+        }catch(PDOException $e){
+            echo $e;
+             return  false;
+        }
     }
 
 }

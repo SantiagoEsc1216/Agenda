@@ -22,7 +22,7 @@
         session_start();
 
         if(empty($_SESSION["username"]) or empty($_SESSION["mail"]) or empty($_SESSION["loggedin"])){
-            header("location: login.php");
+           header("location: login.php");
         }
 
         $UserSession =  new User($_SESSION["username"],"",$_SESSION["mail"]);
@@ -161,21 +161,22 @@
             $name = $_POST["name_contact"];
             $mail = $_POST["mail_contact"];
             $phone = $_POST["phone_contact"];
-            $img = $_POST["img_name"];
+            $new_img = $_FILES["img_contact"];
+            $name_old_img = $_POST["img_name"];
 
             if(isset($_POST["btn_confirm_delete"])){
                 if(validName($name) && validMail($mail) && validPhone($phone) ){
-                    $contact = new Contact($name, $phone, $mail, $img);
+                    $contact = new Contact($name, $phone, $mail, $name_old_img);
                     $id_contact = $id_contact_div[$id_div];
                     $contact-> Delete_contact($id_contact);
                 }
             }
 
             if(isset($_POST["btn_accept"])){
-                if(validName($name) && validMail($mail) && validPhone($phone) ){
-                    $contact = new Contact($name, $phone, $mail, $img);
+                if(validName($name) && validMail($mail) && validPhone($phone) && validImage($new_img)){
+                    $contact = new Contact($name, $phone, $mail, $new_img);
                     $id_contact = $id_contact_div[$id_div];
-                    $contact-> edit_contact($id_contact);
+                    $contact-> edit_contact($id_contact, $name_old_img);
                 }
             }
         }

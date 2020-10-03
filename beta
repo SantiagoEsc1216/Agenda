@@ -5,7 +5,7 @@ Only have to debugging and add a Readme document and the documentation to finish
 
 The changes that ocurred since the last commit are:
 
--The form of edit contact and delect contact now it's created whith javascript at time of click in the button
+-The form of edit contact and delete contact now it's created whith javascript at time of click in the button
 of "Editar" or "Eliminar" with the function "form_contact" in the file "ContactOptions.js".
 
 -The profile options was added in the file "profile.php", this file have one base form and this it's modified
@@ -20,3 +20,16 @@ And now detects if the input it's empty.
 
 - The edit contact funcion now can modify the image contact and delete the image of that was modified.
 and the delete contact function delete the image of folder "Imagenes".
+
+
+beta 2.0:
+
+-update on contact class, now the functions of Contact class  don't access to the global variable $_FILES to get
+image of the contact, now the image information is passed when the object is created.
+
+- now, the delete contact function don't delete images duplicates thanks to the new function img_count.
+
+- The edit_contact function just edit the name, mail and telephone. Now the edit_img function is called if the
+user uploads an image.
+
+-The edit_img function change image and delete the old image if another contact hasn't it.

@@ -55,7 +55,8 @@ function validImage($img_file){
     $imageTypes= array(
         "image/jpeg",
         "image/jpg",
-        "image/png"
+        "image/png",
+        ""
     );
     $imageSizeMax = 2097152; //2 MB
 
