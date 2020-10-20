@@ -33,3 +33,11 @@ image of the contact, now the image information is passed when the object is cre
 user uploads an image.
 
 -The edit_img function change image and delete the old image if another contact hasn't it.
+
+final 1.0:
+
+-fixed bug to close session in create contact site.
+
+-added database file.
+
+-added Readme in english and spanish.

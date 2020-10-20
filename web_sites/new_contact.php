@@ -51,7 +51,7 @@
 
                             <a href="profile.php" class="dropdown-item">Perfil</a>
                                 <div class="dropdown-divider"></div>
-                            <a href="closeSession.php" class="dropdown-item">Cerrar sesion</a>
+                            <a href="../php_scripts/closeSession.php" class="dropdown-item">Cerrar sesion</a>
 
                         </div>
                     </li>

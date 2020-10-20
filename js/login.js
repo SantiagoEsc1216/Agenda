@@ -17,7 +17,7 @@ function empty_input(){
 function login_error(){
 
     message("El usuario o contraseña es incorrecto", "danger");
-    throw_error = false;
+
 }
 
 

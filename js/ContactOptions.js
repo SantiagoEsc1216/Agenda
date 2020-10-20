@@ -351,15 +351,19 @@
   btn_search.addEventListener("click", search)
 
    function search(){
-     let  input_name_contacts = document.getElementsByName("name_contact");
+
+     let  input_name_contacts = document.getElementsByName("names");
+
+     console.log(input_name_contacts.length);
 
       for (let index = 0; index < input_name_contacts.length; index++) {
-        const header = input_name_contacts[index].parentElement;
+
+        const header = document.getElementById("card-header-"+(index+1));
         const card = header.parentElement;
         const form = card.parentElement;
         const div_parent = form.parentElement;
 
-        const name_contact = input_name_contacts[index].value;
+        const name_contact = input_name_contacts[index].innerHTML;
 
         const match_name = name_contact.toLowerCase().indexOf(search_input.value.toLowerCase());
 

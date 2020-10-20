@@ -102,7 +102,7 @@
                             <input type="hidden" name="id_div" value="<?php echo $i;?>">
 
                             <div class="card-header" id="<?php echo "card-header-".$i;?>">
-                                <p class="card-text"><?php  echo $Contact["Name_Contact"];?></p>
+                                <p class="card-text" name="names"><?php  echo $Contact["Name_Contact"];?></p>
                                 <small id="name_info" class="form-text text-danger" hidden>Solo letras, numeros y parentesis</small>
                             </div>
 
