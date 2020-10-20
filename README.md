@@ -1,7 +1,7 @@
 # Agenda
 
 <p >
-  This website has the purpose of privide a simple agenda only with the minimal information of contact.
+  This website has the purpose of provide a simple agenda only with the minimal information of contact.
   <br>
   The users can create contacts with a name, a phone and aa email, also, the users have the possibility of add an image or use a default image.
   <br>
