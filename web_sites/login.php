@@ -80,7 +80,7 @@ if(!empty($_SESSION["loggedin"])){
          </form>
 
             <div class="btn btn-link text-center mx-auto mt-1" style="width: 100%;" >
-                <a href="Registro.php">¿No tienes una cuenta? <br> Puedes registrate aqui</a>
+                <a href="signup.php">¿No tienes una cuenta? <br> Puedes registrate aqui</a>
             </div>
         </div>
 </body>
