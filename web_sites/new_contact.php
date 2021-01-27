@@ -111,7 +111,7 @@
     if($_SERVER["REQUEST_METHOD"]=="POST"){
 
      $name = $_POST["name_contact"];
-     $mail = $_POST["mail_contact"];
+     $mail = $_POST["email_contact"];
      $phone = $_POST["phone_contact"];
      $img = $_FILES["img_contact"];
 

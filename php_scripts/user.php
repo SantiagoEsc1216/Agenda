@@ -142,7 +142,7 @@ function Insert(){
                 $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $stmt = $conn->prepare("SELECT ID from Users where Mail = :Mail");
 
-                $stmt->bindValue(":Mail", $_SESSION["mail"]);
+                $stmt->bindValue(":Mail", $this->mail);
                 $stmt-> execute();
 
                 $ID_User =  $stmt->fetchColumn();
