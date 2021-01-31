@@ -1,6 +1,7 @@
 <?php
 
 use function PHPSTORM_META\type;
+//TODO: Crear nombre propio de imagenes subidas desde el sitio web
 
 require_once "valid_inputs.php";
 
@@ -14,7 +15,7 @@ function __construct($user, $pass, $mail){
 
     $this->user = cleanInput($user);
     $this->pass = cleanInput($pass);
-    $this->mail = filter_var($mail, FILTER_SANITIZE_EMAIL);
+    $this->mail = cleanEmail($mail);
 }
 
 function Insert(){
@@ -133,7 +134,7 @@ function Insert(){
         }
     }
 
-    function Get_ID(){
+     function Get_ID(){
         include("server_sql.php");
 
             try{
@@ -142,7 +143,7 @@ function Insert(){
                 $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $stmt = $conn->prepare("SELECT ID from Users where Mail = :Mail");
 
-                $stmt->bindValue(":Mail", $_SESSION["mail"]);
+                $stmt->bindValue(":Mail", $this->mail);
                 $stmt-> execute();
 
                 $ID_User =  $stmt->fetchColumn();
@@ -240,7 +241,7 @@ function change_username($id_user, $new_username){
         $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $stmt = $conn->prepare("UPDATE users set Username = :new_username WHERE ID = :id_user");
 
-        $stmt-> bindValue(":new_username", $new_username, PDO::PARAM_STR);
+        $stmt-> bindValue(":new_username", cleanInput($new_username), PDO::PARAM_STR);
         $stmt-> bindValue(":id_user", $id_user, PDO::PARAM_INT);
 
         if($stmt-> execute()){
@@ -267,7 +268,7 @@ function change_mail($id_user, $new_mail){
         $conn-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $stmt = $conn-> prepare("UPDATE users set Mail = :new_mail WHERE ID = :id_user");
 
-        $stmt-> bindValue(":new_mail", $new_mail);
+        $stmt-> bindValue(":new_mail", cleanEmail($new_mail));
         $stmt-> bindValue(":id_user", $id_user);
 
         if($stmt-> execute()){

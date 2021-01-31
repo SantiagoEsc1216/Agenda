@@ -31,9 +31,6 @@
 
         $id_contact_div = array();
 
-        if($_SERVER["REQUEST_METHOD"] == "POST"){
-            header("location: ".$_SERVER["PHP_SELF"]);
-        }
     ?>
  <!-------------------------------------------- Navbar ---------------------------------------------------->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -157,26 +154,42 @@
             require_once "../php_scripts/Contact.php";
             require_once "../php_scripts/valid_inputs.php";
 
+
             $id_div = $_POST["id_div"];
-            $name = $_POST["name_contact"];
-            $mail = $_POST["mail_contact"];
-            $phone = $_POST["phone_contact"];
-            $new_img = $_FILES["img_contact"];
+            $id_contact = $id_contact_div[$id_div];
+            $email_user = $_SESSION["mail"];
+
+            $user = new User("","", $email_user);
+            $id_user = $user->Get_ID();
             $name_old_img = $_POST["img_name"];
 
             if(isset($_POST["btn_confirm_delete"])){
-                if(validName($name) && validMail($mail) && validPhone($phone) ){
-                    $contact = new Contact($name, $phone, $mail, $name_old_img);
-                    $id_contact = $id_contact_div[$id_div];
-                    $contact-> Delete_contact($id_contact);
-                }
+
+            $contact = new Contact("","","",$name_old_img);
+            
+            if($contact-> Delete_contact($id_contact, $id_user)){
+                echo "ok";
+            }else{
+                echo "error";
+            }
+                
             }
 
             if(isset($_POST["btn_accept"])){
-                if(validName($name) && validMail($mail) && validPhone($phone) && validImage($new_img)){
+                $name = $_POST["name_contact"];
+                $mail = $_POST["mail_contact"];
+                $phone = $_POST["phone_contact"];
+                if(!empty($_FILES["img_contact"]["name"])){
+                   if(validImage($_FILES["img_contact"])){
+                    $new_img = $_FILES["img_contact"];
+                   }
+                }else{
+                    $new_img = null;
+                }
+                if(validName($name) && validMail($mail) && validPhone($phone)){
                     $contact = new Contact($name, $phone, $mail, $new_img);
                     $id_contact = $id_contact_div[$id_div];
-                    $contact-> edit_contact($id_contact, $name_old_img);
+                    $contact-> edit_contact($id_contact, $id_user ,$name_old_img);
                 }
             }
         }
