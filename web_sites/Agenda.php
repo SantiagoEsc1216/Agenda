@@ -30,6 +30,10 @@
         $num_contacts = $UserSession->get_numberOfContacts($id_user);
 
         $id_contact_div = array();
+        
+        if($_SERVER["REQUEST_METHOD"] == "POST"){
+            header("location: ".$_SERVER["PHP_SELF"]);
+        }
 
     ?>
  <!-------------------------------------------- Navbar ---------------------------------------------------->
