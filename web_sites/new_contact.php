@@ -72,7 +72,7 @@
 
     <div id="form-container">
         <div class="border border-primary container-fluid p-3 mx-auto mt-5 " id="form" style="width: 50%; min-width:300px">
-            <form action="<?php htmlspecialchars('addContact.php')  ?>" method="POST" enctype="multipart/form-data">
+            <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"])  ?>" method="POST" enctype="multipart/form-data">
 
                 <div class="form-group">
                     <label for="name_contact">Nombre:</label>
@@ -107,19 +107,28 @@
 <?php
      require_once ("../php_scripts/valid_inputs.php");
      require_once ("../php_scripts/Contact.php");
+     require_once ("../php_scripts/user.php");
 
     if($_SERVER["REQUEST_METHOD"]=="POST"){
 
      $name = $_POST["name_contact"];
-     $mail = $_POST["email_contact"];
+     $mail = $_POST["mail_contact"];
      $phone = $_POST["phone_contact"];
-     $img = $_FILES["img_contact"];
+     $img = "Default.png";
+     $user = new User("", "", $_SESSION["mail"]);
+     $id_user = $user->Get_ID();
 
-        if(validName($name) && validMail($mail) && validPhone($phone) && validImage($img)){
+        if(validName($name) && validMail($mail) && validPhone($phone)){
+
+            if(!empty($_FILES["img_contact"]["name"])){
+                if(validImage($_FILES["img_contact"])){
+                    $img = $_FILES["img_contact"];
+                }
+            }
 
             $Contact = new Contact($name, $phone, $mail, $img);
 
-            if ($Contact-> Add_contact()){
+            if ($Contact-> Add_contact($id_user)){
                 echo "<script> message('Contacto agregado', 'success') </script>";
                 echo "<script> clean_inputs() </script>";
             }else{

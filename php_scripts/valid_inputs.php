@@ -76,4 +76,10 @@ function cleanInput($input){
     return $input;
 }
 
+function cleanEmail($email){
+ $email = strtolower($email);
+ $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+ return $email;
+}
+
 ?>

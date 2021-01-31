@@ -33,7 +33,7 @@ class Contact{
             if($this->Img_contact == "Default.png"){
                 $img_name = $this->Img_contact;
             }else{
-                if(!isset($img_contact["name"])){
+                if(!isset($this->Img_contact["name"])){
 
                     if(empty($this->Img_contact)){
                     
@@ -55,7 +55,7 @@ class Contact{
                     }
         
                     if($this->Img_contact["name"] != "Default.png"){
-                        move_uploaded_file( $this->Img_contact["tmp_name"],$path.$this->Img_contact["name"]);
+                        move_uploaded_file( $this->Img_contact["tmp_name"],$dir_images.$this->Img_contact["name"]);
                         $img_name = $this->Img_contact["name"];
                     }
                 }
